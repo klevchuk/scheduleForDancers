@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Танцевальное шоу</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9; /* Светло-зеленый фон */
+            margin: 0;
+            padding: 20px;
+            color: #4a148c; /* Темно-фиолетовый текст */
+        }
+
+        h1 {
+            text-align: left; /* Выровнять текст влево */
+            color: #388e3c; /* Ярко-зеленый цвет */
+        }
+
+        h2 {
+            color: #4a148c; /* Темно-фиолетовый цвет */
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border: 2px solid #388e3c; /* Ярко-зеленая рамка */
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4a148c; /* Темно-фиолетовый цвет */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #3e1a6f; /* Темнее фиолетовый при наведении */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            color: #4a148c; /* Темно-фиолетовый цвет текста в списке */
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Расписание танцевальных шоу</h1>
+    <input type="text" id="dancerInput" placeholder="Введите имя танцора" />
+    <button onclick="findShows()">Найти шоу</button>
+
+    <h2>Результаты:</h2>
+    <ul id="results"></ul>
+
+    <script>
+        const shows = {
+            "мужское шоу (детская сцена, come at 12:15)": { time: "12:20", dancers: ["Oleg", "Mars", "Rustam", "Rostik", "Ilya", "Yaroslav"] },
+            "You can do it (come at 12:45)": { time: "13:00", dancers: ["Dima", "Max", "Lemon", "Mikhail", "Anya", "Daria", "Katya", "Diana"] },
+            "Parade (come at 13:30) ❗️Собрание в 13:45": { time: "14:00", dancers: ["Lemon", "Klimenko", "Anton", "Max", "Kristina", "Mery", "Diana", "Sofiia", "Lloyd", "Yaroslav", "Dima", "Oleg", "Evgeny", "Ilya", "Rostik", "Mikhail", "Anya", "Daria", "Krava", "Alona", "Masha"] },
+            "Женское шоу (4D stage, come at 15:45)": { time: "15:50", dancers: ["Daria", "Mery", "Alona", "Anya", "Katya"] },
+            "Waltz (карусель, come at 15:30)": { time: "16:00", dancers: ["Lemon", "Dima", "Anton", "Yulian", "Diana", "Krava", "Kristina", "Sofiia"] },
+            "Party (come at 17:10)": { time: "17:10", dancers: ["Mikhail", "Yulian", "Max", "Masha", "Krava", "Diana"] },
+            "мужское шоу (детская сцена, come at 17:45)": { time: "17:50", dancers: ["Mars", "Rustam", "Rostik", "Oleg", "Lloyd", "Evgeny"] },
+            "Женское шоу (4D stage, come at 17:45)": { time: "17:50", dancers: ["Mery", "Katya", "Kristina", "Sofiia", "Daria", "Alona"] },
+            "Evening parade (come at 18:30)": { time: "19:00", dancers: ["Klimenko", "Yaroslav", "Lloyd", "Ilya", "Alona", "Krava", "Katya", "Anya", "Yulian", "Evgeny", "Anton", "Sofiia", "Mery", "Kristina", "Rustam", "Mars", "Masha"] }
+        };
+
+        function findShows() {
+            const dancerName = document.getElementById("dancerInput").value;
+            const resultsList = document.getElementById("results");
+            resultsList.innerHTML = ""; // очищаем предыдущие результаты
+
+            const results = [];
+
+            for (let show in shows) {
+                if (shows[show].dancers.includes(dancerName)) {
+                    results.push(`${show} - ${shows[show].time}`);
+                }
+            }
+
+            if (results.length === 0) {
+                resultsList.innerHTML = "<li>Шоу не найдены</li>";
+            } else {
+                results.forEach(result => {
+                    const li = document.createElement("li");
+                    li.textContent = result;
+                    resultsList.appendChild(li);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
