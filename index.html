@@ -60,7 +60,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        li {
+        li { 
             padding: 10px;
             border-bottom: 1px solid #eee;
             color: #4a148c; /* Темно-фиолетовый цвет текста в списке */
@@ -74,7 +74,7 @@
 <body>
     <h3>beta</h3>
     <h1>Расписание танцевальных шоу</h1>
-    <h2>27 марта</h2>
+    <h2>28 марта</h2>
     <input type="text" id="dancerInput" placeholder="Введите имя танцора" />
     <button onclick="findShows()">Найти шоу</button>
 
@@ -83,18 +83,23 @@
 
     <script>
         const shows = {
-            "🕺12:20 Мужское шоу (детская сцена, come at 12:15 ": { dancers: ["Mars", "Sergey", "Max", "Ilya", "Yaroslav", "Oleg"] },
-            "❗️13:00 You can do it (come at 12:45) ": { dancers: ["Yulian", "Rostik", "Mikhail", "Ilya", "Anya", "Mery", "Milka", "Miya"] },
-            "❗️14:00 Parade Dragon (come at 13:30)❗️Собрание в 13:45": { dancers: ["Sergey", "Max", "Anton", "Rustam", "Milka", "Katya", "Miya", "Mery"] },
-            "❗️14:00 Parade Boys unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Oleg", "Ilya", "Mikhail", "Evgeny", "Yaroslav", "Dima"] },
-            "❗️14:00 Parade Girls unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Sofiia", "Datri", "Alona", "Anya", "Krava", "Sapronova", "Bordiian", "Tetiana"] },
-            "❗️14:00 Parade Dance car  (come at 13:30)❗️Собрание в 13:45": { dancers: ["Mars", "Yulian"] },
-            "❗️14:00 Parade Scorpion (come at 13:30)❗️Собрание в 13:45": { dancers: ["Masha"] },
-            "❗️15:35 waltz (карусель, come at 15:30) ": { dancers: ["Yulian", "Anton", "Yaroslav", "Dima", "Kristina", "Krava", "Alona", "Katya"] },
-            "👯‍♀️15:45 женское шоу (4D stage , come at 15:40) ": { dancers: ["Datri", "Anya", "Daria", "Sofiia", "Miya", "Bordiian", "Tetiana", "Sapronova"] },
-            "❗️16:20 Party ( come at 16:00)": { dancers: ["Mikhail", "Max", "Dima", "Sergey", "Alona", "Krava", "Masha", "Milka"] },
-            "🕺16:45 мужское шоу (детская сцена, come at 16:40)": { dancers: ["Rustam", "Rostik", "Anton", "Mars", "Evgeny", "Oleg"] },
-            "👯‍♀️17:15 женское шоу (4D stage , come at 17:10)": { dancers: ["Katya", "Kristina", "Bordiian", "Daria", "Sofiia", "Tetiana", "Sapronova", "Datri"] },
+            //"11:00 Chimelong hotel 10:30 машинка от общаги ": { dancers: ["Klimenko", "Anton", "Dima", "Anya", "Sofiia", "Mery"] },
+            //"11:30 Safari hotel ❗️Мужское шоу ❗️ 11:00 машинка от общаги ❗️костюмы и обувь с собой в отель , и после отеля забрать с собой ❗️": { dancers: ["Mars", "Daniil", "Yaroslav", "Ilya", "Oleg", "Rostik"] },
+            "❗️13:00 You can do it (come at 12:45) ": { dancers: ["Lemon", "Yulian", "Max", "Mikhail", "Milka", "Diana", "Dasha", "Krava"] },
+            "❗️14:00 Dragon Parade (come at 13:30) ❗️Собрание в 13:45": { dancers: ["Lemon", "Klimenko", "Anton", "Max", "Diana", "Katya", "Kristina", "Mery"] },
+            "❗️14:00 Boys unite Parade (come at 13:30) ❗️Собрание в 13:45": { dancers: ["Lloyd", "Daniil", "Rostik", "Ilya", "Mikhail", "Yulian", "Evgeny", "Dima"] },
+            "❗️14:00 Girls unite Parade (come at 13:30) ❗️Собрание в 13:45": { dancers: ["Dasha", "Sofiia", "Daria", "Anya", "Krava", "Sapronova", "Bordiian", "Datri"] },
+            "❗️14:00 Scorpion Parade (come at 13:30) ❗️Собрание в 13:45": { dancers: ["Masha"] },
+            "15:00 женское шоу ( 4D stage , come at 14:55)": { dancers: ["Daria", "Anya", "Sofiia", "Katya", "Sapronova", "Bordiian", "Kristina", "Datri"] },
+            "❗️16:00 You can do it (come at 15:45)": { dancers: ["Max", "Lemon", "Dima", "Ilya", "Diana", "Dasha", "Krava", "Milka"] },
+            "🕺16:10  мужское шоу ( карусель, come at 16:05)": { dancers: ["Rustam", "Daniil", "Anton",  "Evgeny", "Mars", "Rostik"] },
+            "👯‍♀️16:30 женское шоу (central stage ❗️ come at 16:25)": { dancers: ["Anya", "Sapronova", "Daria", "Sofiia", "Mery", "Katya"] },
+            "👯‍♀️17:40 женское шоу (❗️❗️central stage, come at 17:35) ": { dancers: ["Bordiian", "Datri", "Daria", "Mery", "Katya", "Kristina"] },
+            "🕺18:05 мужское шоу ( карусель, come at 18:00)": { dancers: ["Rustam", "Mars", "Ilya", "Oleg", "Lloyd", "Rostik"] },
+            "19:00 Dragon Evening parade (come at 18:30) ": { dancers: ["Evgeny", "Mikhail", "Klimenko", "Lloyd", "Milka", "Dasha", "Sapronova", "Krava"] },
+            "19:00 Rhinoceros Evening parade (come at 18:30)": { dancers: ["Rustam", "Oleg", "Daniil", "Mery", "Kristina", "Anya"] },
+            "19:00 Bull Evening parade": {dancers: ["Mars", "Yulian", "Datri", "Bordiian"]},
+            "19:00 Scorpion Evening parade (come at 18:30) ": { dancers: ["Masha"] },
             
         };
 
