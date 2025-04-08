@@ -74,7 +74,7 @@
 <body>
     <h3>beta</h3>
     <h1>Расписание танцевальных шоу</h1>
-    <h2>8 апреля</h2>
+    <h2>9 апреля</h2>
     <input type="text" id="dancerInput" placeholder="Введите имя танцора" />
     <button onclick="findShows()">Найти шоу</button>
 
@@ -83,23 +83,22 @@
 
     <script>
         const shows = {
-            "🕺12:20 Мужское шоу (детская сцена, come at 12:15 ": { dancers: ["Anton", "Lloyd", "Ilya", "Oleg", "Sergey", "Max"] },
-            "❗️13:00 You can do it (come at 12:45) ": { dancers: ["Anton", "Lloyd", "Mikhail", "Yulian", "Diana", "Masha", "Krava", "Milka"] },
-            "❗️14:00 Parade Dragon (come at 13:30)❗️Собрание в 13:45": { dancers: ["Sergey", "Anton", "Max", "Lemon", "Kristina", "Miya", "Mery", "Milka"] },
-            "❗️14:00 Parade Boys unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Ilya", "Lloyd", "Evgeny", "Yulian", "Rostik", "Daniil", "Dima", "Mikhail"] },
-            "❗️14:00 Parade Girls unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Sofiia", "Anya", "Krava", "Datri", "Sapronova", "Bordiian", "Tetiana", "Dasha"] },
-            //"❗️14:00 Parade Dance car  (come at 13:30)❗️Собрание в 13:45": { dancers: ["Mars", "Yulian"] },
+            "10:00 репетиция в цирковом зале": { dancers: ["Milka", "Daria", "Alona", "Tetiana", "Sapronova", "Bordiian", "Kristina", "Mery", "Sergey", "Daniil", "Max", "Rostik", "Klimenko", "Mars", "Rustam", "Oleg", "Mikhail"] },
+            "🕺12:20 Мужское шоу (детская сцена, come at 12:15 ": { dancers: ["Mars", "Anton", "Evgeny", "Sergey", "Rustam", "Daniil"] },
+            "❗️13:00 You can do it (come at 12:45) ": { dancers: ["Dima", "Lemon", "Yulian", "Ilya", "Anya", "Dasha", "Diana", "Milka"] },
+            "❗️14:00 Parade Dragon (come at 13:30)❗️Собрание в 13:45": { dancers: ["Klimenko", "Rustam", "Max", "Lemon", "Sofiia", "Katya", "Diana", "Milka"] },
+            "❗️14:00 Parade Boys unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Yaroslav", "Ilya", "Lloyd", "Rostik", "Dima", "Daniil"] },
+            "❗️14:00 Parade Girls unite (come at 13:30)❗️Собрание в 13:45": { dancers: ["Daria", "Alona", "Krava", "Datri", "Bordiian", "Tetiana"] },
+            "❗️14:00 Parade Dance car  (come at 13:30)❗️Собрание в 13:45": { dancers: ["Miya", "Sapronova", "Mars", "Yulian"] },
             "❗️14:00 Parade Scorpion (come at 13:30)❗️Собрание в 13:45": { dancers: ["Masha"] },
-            "померить костюм после парада": { dancers: ["Mikhail", "Tetiana"] },
-            "❗️15:35 waltz (карусель, come at 15:30) ": { dancers: ["Dima", "Yulian", "Lemon", "Yaroslav", "Krava", "Diana", "Dasha", "Sofiia"] },
-            "👯‍♀️15:45 женское шоу (4D stage , come at 15:40) ": { dancers: ["Anya", "Datri", "Mery", "Sapronova", "Bordiian", "Tetiana", "Kristina", "Miya"] },
-            "🕺15:45 мужское шоу ( детская сцена, come at 15:40)": { dancers: ["Oleg", "Sergey", "Daniil", "Rostik", "Evgeny", "Max"] },
-            "❗️16:20 Party ( come at 16:00)": { dancers: ["Mikhail", "Dima", "Lemon", "Ilya", "Kristina", "Mery", "Diana", "Milka"] },
-            "16:20 мужское шоу ❗️СЪЕМКА❗️( детская сцена, come at 16:15)": { dancers: ["Oleg", "Sergey", "Daniil", "Rostik", "Evgeny", "Max"] },
-            "👯‍♀️17:15 женское шоу (4D stage , come at 17:10)": { dancers: ["Sofiia", "Anya", "Miya", "Sapronova", "Bordiian", "Tetiana", "Datri", "Alona"] },
+            "❗️15:35 waltz (карусель, come at 15:30) ": { dancers: ["Dima", "Yulian", "Lemon", "Klimenko", "Krava", "Diana", "Dasha", "Sofiia"] },
+            "👯‍♀️15:45 женское шоу (4D stage , come at 15:40) ": { dancers: ["Katya", "Daria", "Anya", "Datri", "Sapronova", "Bordiian", "Tetiana", "Miya"] },
+            "❗️16:20 Party ( come at 16:00)": { dancers: ["Ilya", "Lloyd", "Max", "Sergey", "Dasha", "Krava", "Milka", "Masha"] },
+            "🕺16: 45 мужское шоу ( детская сцена, come at 16:40)": { dancers: ["Rostik", "Klimenko", "Mars", "Anton", "Evgeny", "Rustam"] },
+            "👯‍♀️17:15 женское шоу (4D stage , come at 17:10)": { dancers: ["Katya", "Daria", "Sofiia", "Anya", "Sapronova", "Bordiian", "Tetiana", "Datri"] },
             //"17:30 машина с парка-отель(с собой костюм) ❗️Отель вальс 2 человека": { dancers: ["Anton", "Masha"] },
             //"18:50 машина с отеля-общагу(с собой костюм) ❗️Отель вальс 2 человека": { dancers: ["Anton", "Masha"] },
-            "17:50 репетиция в цирковом зале": { dancers: ["Milka", "Mery", "Daria", "Alona", "Tetiana", "Sapronova", "Bordiian", "Kristina", "Sergey", "Oleg", "Daniil", "Max", "Mikhail", "Rostik", "Klimenko", "Mars", "Rustam"] },
+            "17:45 репетиция в цирковом зале": { dancers: ["Milka", "Daria", "Alona", "Tetiana", "Sapronova", "Bordiian", "Kristina", "Mery", "Sergey", "Daniil", "Max", "Rostik", "Klimenko", "Mars", "Rustam", "Oleg", "Mikhail"] },
 
         };
 
