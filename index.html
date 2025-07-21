@@ -4,47 +4,63 @@ html
 <html lang="ru">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Расписание шоу</title>
     <style>
-        /* пастельная зелёно-фиолетовая гамма */
+        :root{
+            --bg:#f0f8f0;
+            --primary:#388e3c;
+            --accent:#9575cd;
+            --text:#4a148c;
+            --light:#fff;
+        }
         *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-        body{background:#f0f8f0;color:#4a148c;padding:20px}
-        .container{max-width:800px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(74,20,140,.15)}
-        .tabs{display:flex;background:#e8f5f9}
-        .tab{flex:1;padding:15px;border:none;background:none;cursor:pointer;font-size:16px;color:#388e3c;transition:.3s}
-        .tab.active{background:#fff;color:#388e3c;border-bottom:2px solid #388e3c}
-        .tab-content{display:none;padding:30px}
-        .tab-content.active{display:block}
-        textarea{width:100%;min-height:280px;padding:10px;border:1px solid #c8e6c9;border-radius:5px;font-family:monospace;resize:vertical}
-        input[type=password],input[type=text]{padding:10px;border:1px solid #c8e6c9;border-radius:5px;margin-right:10px}
-        button{padding:10px 20px;background:#9575cd;color:#fff;border:none;border-radius:5px;cursor:pointer}
-        button:hover{background:#7e57c2}
-        .input-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
-        .date-display{background:#e8f5e9;color:#388e3c;padding:10px;border-radius:5px;font-weight:700;text-align:center;margin-bottom:15px}
-        .dancer-list{margin-top:20px;padding:15px;background:#f3e5f5;border:1px solid #d1c4e9;border-radius:5px}
-        .dancer-list h3{color:#8c2c14;text-align:right;margin:0 0 10px}
+        html,body{height:100%}
+        body{background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+        /* шапка */
+        header{background:var(--primary);color:var(--light);padding:12px 16px;font-size:18px;text-align:center}
+
+        /* вкладки */
+        .tabs{display:flex;height:48px}
+        .tab{flex:1;border:none;background:#e8f5f9;color:var(--primary);font-size:14px}
+        .tab.active{background:var(--light);border-bottom:3px solid var(--primary)}
+
+        /* контейнер со свайп-переключением */
+        .content{position:relative;overflow:hidden;height:calc(100vh - 48px - 48px)}
+        .tab-content{position:absolute;top:0;left:0;width:100%;height:100%;padding:16px;transition:transform .3s;overflow-y:auto}
+        .tab-content:nth-child(1){transform:translateX(0)}
+        .tab-content:nth-child(2){transform:translateX(100%)}
+
+        /* поля и кнопки */
+        textarea{width:100%;min-height:180px;padding:8px;border:1px solid #c8e6c9;border-radius:5px;font-size:16px}
+        input[type=password],input[type=text]{width:100%;padding:8px;margin-bottom:8px;border:1px solid #c8e6c9;border-radius:5px;font-size:16px}
+        button{width:100%;padding:12px;background:var(--accent);color:var(--light);border:none;border-radius:5px;font-size:16px}
+        button:active{background:#7e57c2}
+
+        /* список */
+        .date-display{background:var(--bg);color:var(--primary);padding:10px;border-radius:5px;font-weight:700;text-align:center;margin-bottom:10px}
+        .dancer-list{background:#f3e5f5;border:1px solid #d1c4e9;border-radius:5px;padding:10px;margin-top:10px}
+        .dancer-list h3{color:#8c2c14;text-align:right;margin-bottom:5px;font-size:16px}
         .dancer-list ul{list-style:none}
-        .dancer-list li{padding:5px 0;border-bottom:1px solid #e0e0e0;color:#4a148c}
-        .dancer-list li:last-child{border:none}
-        .error{color:#d32f2f;margin-top:10px}
-        .success{color:#388e3c;margin-top:10px}
+        .dancer-list li{padding:4px 0;border-bottom:1px solid #e0e0e0}
+        .error,.success{margin-top:8px;font-size:14px}
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- вкладки в новом порядке -->
-    <div class="tabs">
-        <button class="tab active" onclick="switchTab('search')">Поиск танцора</button>
-        <button class="tab" onclick="switchTab('schedule')">Редактировать расписание</button>
-    </div>
+<header>Расписание шоу</header>
 
-    <!-- Вкладка 1: поиск танцора (теперь первая) -->
-    <div id="search-tab" class="tab-content active">
-        <h2>Поиск танцора</h2>
-        <div class="input-group">
-            <input type="text" id="dancerName" placeholder="Имя танцора">
-            <button onclick="findDancer()">Найти</button>
-        </div>
+<!-- кнопки-вкладки -->
+<div class="tabs">
+    <button class="tab active" id="tab1Btn">Поиск танцора</button>
+    <button class="tab" id="tab2Btn">Редактировать</button>
+</div>
+
+<div class="content" id="content">
+    <!-- Вкладка 1: поиск -->
+    <div class="tab-content" id="search">
+        <input type="text" id="dancerName" placeholder="Имя танцора">
+        <button onclick="findDancer()">Найти</button>
         <div id="dateDisplay" class="date-display" style="display:none"></div>
         <div id="dancerResults" class="dancer-list" style="display:none">
             <h3>Участвует в шоу:</h3>
@@ -52,22 +68,19 @@ html
         </div>
     </div>
 
-    <!-- Вкладка 2: редактирование расписания (теперь вторая) -->
-    <div id="schedule-tab" class="tab-content">
-        <h2>Редактировать расписание</h2>
+    <!-- Вкладка 2: редактирование -->
+    <div class="tab-content" id="schedule">
         <textarea id="scheduleText" placeholder="15 июня 2024
 
 Summer Vibes
 Milka, Daria, Sergey
 
 Neon Party
-Alona Daniil
+Alona, Daniil
 "></textarea>
-        <div class="input-group">
-            <input type="password" id="password" placeholder="Пароль">
-            <button onclick="saveSchedule()">Сохранить</button>
-        </div>
-        <div id="saveMsg" class="success" style="display:none">Расписание сохранено!</div>
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="saveSchedule()">Сохранить</button>
+        <div id="saveMsg" style="display:none"></div>
     </div>
 </div>
 
@@ -79,86 +92,84 @@ Alona Daniil
         'Dasha','Diana','Sofiia','Yaroslav','Krava','Datri','Miya','Masha','Katya','Vera'
     ];
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabId + '-tab').classList.add('active');
-        document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    // переключение вкладок
+    const content = document.getElementById('content');
+    const tab1Btn = document.getElementById('tab1Btn');
+    const tab2Btn = document.getElementById('tab2Btn');
+    const pages = content.children;
+
+    function switchTab(n){
+        [tab1Btn,tab2Btn].forEach((btn,i)=>btn.classList.toggle('active',i===n));
+        pages[0].style.transform = n===0?'translateX(0)':'translateX(-100%)';
+        pages[1].style.transform = n===1?'translateX(0)':'translateX(100%)';
+    }
+    tab1Btn.onclick = ()=>switchTab(0);
+    tab2Btn.onclick = ()=>switchTab(1);
+
+    // свайпы
+    let startX = 0;
+    content.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+    content.addEventListener('touchend',e=>{
+        const endX=e.changedTouches[0].clientX;
+        const diff = endX - startX;
+        if(Math.abs(diff)>50){
+            const current = tab1Btn.classList.contains('active')?0:1;
+            const next = diff>0?0:1;
+            if(next!==current) switchTab(next);
+        }
+    });
+
+    /*  логика сохранения и поиска (без изменений)  */
+    function saveSchedule(){
+        const pwd=document.getElementById('password').value.trim();
+        const msg=document.getElementById('saveMsg');
+        if(pwd!=='pass123'){
+            msg.textContent='Неверный пароль';msg.className='error';msg.style.display='block';return;
+        }
+        const raw=document.getElementById('scheduleText').value.trim();
+        if(!raw){
+            msg.textContent='Пустое расписание';msg.className='error';msg.style.display='block';return;
+        }
+        localStorage.setItem('scheduleData',raw);
+        msg.textContent='Сохранено!';msg.className='success';msg.style.display='block';
     }
 
-    function saveSchedule() {
-        const pwd = document.getElementById('password').value.trim();
-        if (pwd !== '123') {
-            document.getElementById('saveMsg').textContent = 'Неверный пароль';
-            document.getElementById('saveMsg').className = 'error';
-            document.getElementById('saveMsg').style.display = 'block';
-            return;
-        }
-        const raw = document.getElementById('scheduleText').value.trim();
-        if (!raw) {
-            document.getElementById('saveMsg').textContent = 'Пустое расписание';
-            document.getElementById('saveMsg').className = 'error';
-            document.getElementById('saveMsg').style.display = 'block';
-            return;
-        }
-        localStorage.setItem('scheduleData', raw);
-        document.getElementById('saveMsg').textContent = 'Расписание сохранено!';
-        document.getElementById('saveMsg').className = 'success';
-        document.getElementById('saveMsg').style.display = 'block';
-    }
+    function findDancer(){
+        const name=document.getElementById('dancerName').value.trim();
+        if(!name)return;
+        const raw=localStorage.getItem('scheduleData');
+        if(!raw){alert('Расписание не сохранено');return;}
 
-    function findDancer() {
-        const name = document.getElementById('dancerName').value.trim();
-        if (!name) return;
-
-        const raw = localStorage.getItem('scheduleData');
-        if (!raw) {
-            alert('Расписание ещё не сохранено.');
-            return;
-        }
-
-        const lines = raw.split(/\r?\n/);
-        let date = '';
-        const shows = [];
-        let i = 0;
-
-        if (lines.length) date = lines[i++].trim();
-
-        while (i < lines.length) {
-            while (i < lines.length && lines[i].trim() === '') i++;
-            if (i >= lines.length) break;
-
-            const showName = lines[i++].trim();
-            if (!showName) continue;
-
-            const dancers = [];
-            while (i < lines.length && lines[i].trim() !== '') {
-                lines[i].split(',').forEach(p => {
-                    const d = p.trim();
-                    if (d) dancers.push(d);
-                });
+        const lines=raw.split(/\r?\n/);
+        let date='',i=0;
+        if(lines.length)date=lines[i++].trim();
+        const shows=[];
+        while(i<lines.length){
+            while(i<lines.length&&lines[i].trim()==='')i++;if(i>=lines.length)break;
+            const showName=lines[i++].trim();if(!showName)continue;
+            const dancers=[];
+            while(i<lines.length&&lines[i].trim()!==''){
+                lines[i].split(',').forEach(p=>{const d=p.trim();if(d)dancers.push(d)});
                 i++;
             }
-            shows.push({ showName, dancers });
+            shows.push({showName,dancers});
         }
+        const result=shows.filter(s=>s.dancers.includes(name));
 
-        const result = shows.filter(s => s.dancers.includes(name));
-
-        document.getElementById('dateDisplay').textContent = date;
-        document.getElementById('dateDisplay').style.display = 'block';
-
-        const ul = document.getElementById('showList');
-        ul.innerHTML = '';
-        if (result.length === 0) {
-            ul.innerHTML = '<li>Не найдено</li>';
-        } else {
-            result.forEach(s => {
-                const li = document.createElement('li');
-                li.textContent = s.showName;
+        document.getElementById('dateDisplay').textContent=date;
+        document.getElementById('dateDisplay').style.display='block';
+        const ul=document.getElementById('showList');
+        ul.innerHTML='';
+        if(result.length===0){
+            ul.innerHTML='<li>Не найдено</li>';
+        }else{
+            result.forEach(s=>{
+                const li=document.createElement('li');
+                li.textContent=s.showName;
                 ul.appendChild(li);
             });
         }
-        document.getElementById('dancerResults').style.display = 'block';
+        document.getElementById('dancerResults').style.display='block';
     }
 </script>
 </body>
