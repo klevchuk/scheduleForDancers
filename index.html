@@ -74,7 +74,6 @@ Neon Party
 Alona, Diana
 "></textarea>
         <input type="password" id="password" placeholder="Пароль">
-        <button
         <button onclick="generateCode()">Сохранить и получить код</button>
         <div id="saveMsg" style="display:none"></div>
         <pre id="generatedCode" style="display:none;margin-top:8px"></pre>
@@ -83,7 +82,7 @@ Alona, Diana
 
 <script>
 /* ===== 1.  Встроенное расписание ===== */
-/*  Скопируйте сюда объект, который сгенерирует вкладка «Редактировать». */
+/*  ВСТАВЬТЕ сюда объект, полученный во второй вкладке.  */
 const schedule = {};
 
 /* ===== 2.  Переключение вкладок ===== */
@@ -93,86 +92,89 @@ const tab2Btn  = document.getElementById('tab2Btn');
 const pages    = content.children;
 
 function switchTab(n){
-    [tab1Btn,tab2Btn].forEach((btn,i)=>btn.classList.toggle('active',i===n));
-    pages[0].style.transform = n===0?'translateX(0)':'translateX(-100%)';
-    pages[1].style.transform = n===1?'translateX(0)':'translateX(100%)';
+    [tab1Btn, tab2Btn].forEach((btn, i) => btn.classList.toggle('active', i === n));
+    pages[0].style.transform = n === 0 ? 'translateX(0)' : 'translateX(-100%)';
+    pages[1].style.transform = n === 1 ? 'translateX(0)' : 'translateX(100%)';
 }
-tab1Btn.onclick = ()=>switchTab(0);
-tab2Btn.onclick = ()=>switchTab(1);
+tab1Btn.onclick = () => switchTab(0);
+tab2Btn.onclick = () => switchTab(1);
 
 let startX = 0;
-content.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-content.addEventListener('touchend',e=>{
-    const endX=e.changedTouches[0].clientX;
+content.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+content.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
     const diff = endX - startX;
-    if(Math.abs(diff)>50){
-        const current = tab1Btn.classList.contains('active')?0:1;
-        const next = diff>0?0:1;
-        if(next!==current) switchTab(next);
+    if (Math.abs(diff) > 50) {
+        const current = tab1Btn.classList.contains('active') ? 0 : 1;
+        const next = diff > 0 ? 0 : 1;
+        if (next !== current) switchTab(next);
     }
 });
 
 /* ===== 3.  Генерация кода ===== */
-function generateCode(){
+function generateCode() {
     const pwd = document.getElementById('password').value.trim();
     const msg = document.getElementById('saveMsg');
     const out = document.getElementById('generatedCode');
 
-    if(pwd !== '123'){
-        msg.textContent='Неверный пароль';
-        msg.className='error';
-        msg.style.display='block';
-        out.style.display='none';
+    if (pwd !== '123') {
+        msg.textContent = 'Неверный пароль';
+        msg.className = 'error';
+        msg.style.display = 'block';
+        out.style.display = 'none';
         return;
     }
 
     const raw = document.getElementById('scheduleText').value.trim();
-    if(!raw){
-        msg.textContent='Пустое расписание';
-        msg.className='error';
-        msg.style.display='block';
-        out.style.display='none';
+    if (!raw) {
+        msg.textContent = 'Пустое расписание';
+        msg.className = 'error';
+        msg.style.display = 'block';
+        out.style.display = 'none';
         return;
     }
 
     /* парсим в объект */
     const lines = raw.split(/\r?\n/);
-    let date='', i=0;
-    if(lines.length) date = lines[i++].trim();
+    let date = '', i = 0;
+    if (lines.length) date = lines[i++].trim();
+
     const shows = {};
-    while(i<lines.length){
-        while(i<lines.length && lines[i].trim()==='') i++;
-        if(i>=lines.length) break;
+    while (i < lines.length) {
+        while (i < lines.length && lines[i].trim() === '') i++;
+        if (i >= lines.length) break;
+
         const showName = lines[i++].trim();
-        if(!showName) continue;
+        if (!showName) continue;
+
         const dancers = [];
-        while(i<lines.length && lines[i].trim()!==''){
-            lines[i].split(',').forEach(p=>{
-                const d=p.trim();
-                if(d) dancers.push(d);
+        while (i < lines.length && lines[i].trim() !== '') {
+            lines[i].split(',').forEach(p => {
+                const d = p.trim();
+                if (d) dancers.push(d);
             });
             i++;
         }
-        shows[showName]=dancers;
+        shows[showName] = dancers;
     }
-    const obj = {[date]:shows};
+    const obj = { [date]: shows };
 
     /* красивый вывод */
     const code = `const schedule = ${JSON.stringify(obj, null, 4)};`;
     out.textContent = code;
-    out.style.display='block';
+    out.style.display = 'block';
 
-    msg.textContent='Скопируйте код выше в переменную schedule вручную';
-    msg.className='success';
-    msg.style.display='block';
+    msg.textContent = 'Скопируйте код выше и вставьте в переменную schedule';
+    msg.className = 'success';
+    msg.style.display = 'block';
 }
 
-/* ===== 4.  Поиск танцора по встроенному schedule ===== */
-function findDancer(){
+/* ===== 4.  Поиск танцора ===== */
+function findDancer() {
     const name = document.getElementById('dancerName').value.trim();
-    if(!name) return;
+    if (!name) return;
 
-    if(Object.keys(schedule).length===0){
+    if (Object.keys(schedule).length === 0) {
         alert('Расписание не вставлено в переменную schedule!');
         return;
     }
@@ -185,13 +187,12 @@ function findDancer(){
     );
 
     document.getElementById('dateDisplay').textContent = date;
-    document.getElementById('dateDisplay').style.display='block';
+    document.getElementById('dateDisplay').style.display = 'block';
 
     const ul = document.getElementById('showList');
-    ul.innerHTML='';
-    if(result.length===0){
-        ul.innerHTML
-        <li>Не найдено</li>
+    ul.innerHTML = '';
+    if (result.length === 0) {
+        ul.innerHTML = '<li>Не найдено</li>';
     } else {
         result.forEach(showName => {
             const li = document.createElement('li');
@@ -199,7 +200,7 @@ function findDancer(){
             ul.appendChild(li);
         });
     }
-    document.getElementById('dancerResults').style.display='block';
+    document.getElementById('dancerResults').style.display = 'block';
 }
 </script>
 </body>
