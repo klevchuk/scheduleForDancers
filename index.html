@@ -74,7 +74,7 @@ Summer Vibes
 Milka, Daria, Sergey
 
 Neon Party
-Alona, Daniil
+Alona, Diana
 "></textarea>
         <input type="password" id="password" placeholder="Пароль">
         <button onclick="saveSchedule()">Сохранить</button>
@@ -121,7 +121,7 @@ Alona, Daniil
     function saveSchedule(){
         const pwd=document.getElementById('password').value.trim();
         const msg=document.getElementById('saveMsg');
-        if(pwd!=='pass123'){
+        if(pwd!=='123'){
             msg.textContent='Неверный пароль';msg.className='error';msg.style.display='block';return;
         }
         const raw=document.getElementById('scheduleText').value.trim();
