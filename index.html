@@ -294,7 +294,7 @@ function findDancer(name) {
         shows[showName].includes(name)
     );
 
-    document.getElementById('dateDisplay').textContent = `${name} - это твои шоу на ${date}`; // 修改显示内容
+    document.getElementById('dateDisplay').textContent = `${date}         ${name}`; // 修改显示内容
     document.getElementById('dateDisplay').style.display = 'block';
 
     const ul = document.getElementById('scheduleListUl');
