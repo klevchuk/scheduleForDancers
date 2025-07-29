@@ -11,6 +11,7 @@
             --accent:#9575cd;
             --text:#4a148c;
             --light:#fff;
+            --copy-color: #4caf50; /* Новый оттенок для кнопки копировать */
         }
         *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
         html,body{height:100%}
@@ -29,8 +30,9 @@
 
         textarea{width:100%;min-height:180px;padding:8px;border:1px solid #c8e6c9;border-radius:5px;font-size:16px}
         input[type=password],input[type=text]{width:100%;padding:8px;margin-bottom:8px;border:1px solid #c8e6c9;border-radius:5px;font-size:16px}
-        button{width:100%;padding:12px;background:var(--accent);color:var(--light);border:none;border-radius:5px;font-size:16px}
+        button{width:100%;padding:12px;background:var(--accent);color:var(--light);border:none;border-radius:5px;font-size:16px;margin-bottom:8px}
         button:active{background:#7e57c2}
+        button.copy-btn{background:var(--copy-color)} /* Стиль для кнопки копировать */
 
         .date-display{background:var(--bg);color:var(--primary);padding:10px;border-radius:5px;font-weight:700;text-align:center;margin-bottom:10px}
         .dancer-list{background:#f3e5f5;border:1px solid #d1c4e9;border-radius:5px;padding:10px;margin-top:10px}
@@ -77,6 +79,7 @@
 "></textarea>
         <input type="password" id="password" placeholder="Пароль">
         <button onclick="generateCode()">обработать</button>
+        <button class="copy-btn" onclick="copyToClipboard()">копировать</button>
         <div id="saveMsg" style="display:none"></div>
         <pre id="generatedCode" style="display:none;margin-top:8px"></pre>
     </div>
@@ -85,7 +88,7 @@
 <script>
 /* ===== 1.  Встроенное расписание ===== */
 
-const schedule = {
+   const schedule = {
     "30 июля": {
         "Day off:": [
             "Ilya",
@@ -176,20 +179,30 @@ const pages    = content.children;
 function switchTab(n){
     [tab1Btn, tab2Btn].forEach((btn, i) => btn.classList.toggle('active', i === n));
     pages[0].style.transform = n === 0 ? 'translateX(0)' : 'translateX(-100%)';
-    pages[1].style.transform = n === 1 ? 'translateX(0)' : 'translateX(100%)';
+       pages[1].style.transform = n === 1 ? 'translateX(0)' : 'translateX(100%)';
 }
 tab1Btn.onclick = () => switchTab(0);
 tab2Btn.onclick = () => switchTab(1);
 
-let startX = 0;
-content.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-content.addEventListener('touchend', e => {
+// Добавляем обработчик для смахивания
+let startX;
+
+document.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+});
+
+document.addEventListener('touchend', (e) => {
     const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-    if (Math.abs(diff) > 50) {
-        const current = tab1Btn.classList.contains('active')? 0 : 1;
-        const next = diff > 0 ? 0 : 1;
-        if (next !== current) switchTab(next);
+    const deltaX = startX - endX;
+
+    if (Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+            // Смахивание влево
+            switchTab(1);
+        } else {
+            // Смахивание вправо
+            switchTab(0);
+        }
     }
 });
 
@@ -251,6 +264,24 @@ function generateCode() {
     msg.style.display = 'block';
 }
 
+function copyToClipboard() {
+    const generatedCode = document.getElementById('generatedCode');
+    if (generatedCode.style.display === 'none') {
+        return;
+    }
+    const code = generatedCode.textContent;
+    navigator.clipboard.writeText(code)
+        .then(() => {
+            const saveMsg = document.getElementById('saveMsg');
+            saveMsg.textContent = 'Скопировано!';
+            saveMsg.className = 'success';
+            saveMsg.style.display = 'block';
+            setTimeout(() => {
+                saveMsg.style.display = 'none';
+            }, 2000);
+        });
+}
+
 /* ===== 4.  Отображение полного расписания и поиск танцора ===== */
 function displaySchedule() {
     const dateDisplay = document.getElementById('dateDisplay');
@@ -285,14 +316,14 @@ function displaySchedule() {
 }
 
 function findDancer(name) {
-    const date = Object.keys(schedule)[0]; // 获取日期
-    const shows = schedule[date]; // 获取当天的所有演出
+    const date = Object.keys(schedule)[0];
+    const shows = schedule[date];
 
     const result = Object.keys(shows).filter(showName =>
         shows[showName].includes(name)
     );
 
-    document.getElementById('dateDisplay').textContent = `${date}         ${name}`; // 修改显示内容
+    document.getElementById('dateDisplay').textContent = `${date}         ${name}`;
     document.getElementById('dateDisplay').style.display = 'block';
 
     const ul = document.getElementById('scheduleListUl');
