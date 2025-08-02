@@ -39,8 +39,23 @@
         .dancer-list h3{color:#8c2c14;text-align:right;margin-bottom:5px;font-size:16px}
         .dancer-list ul{list-style:none}
         .dancer-list li{padding:4px 0;border-bottom:1px solid #e0e0e0}
-        .dancer-list li a{color:var(--accent);text-decoration:none}
-        .dancer-list li a:hover{text-decoration:underline}
+        .dancer-list li button {
+            background: rgba(255, 255, 255, 0.8); /* Более светлый фон */
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Добавляем тонкую границу */
+            border-radius: 10px; /* Более округлые углы */
+            padding: 6px 12px; /* Увеличиваем внутренний отступ */
+            font-size: 14px; /* Увеличиваем размер шрифта */
+            cursor: pointer;
+            text-align: center; /* Центрируем текст */
+            margin: 0 5px; /* Уменьшаем отступы между кнопками */
+            text-decoration: none;
+            color: var(--text);
+            transition: background 0.3s, border 0.3s;
+        }
+        .dancer-list li button:hover {
+            background: rgba(255, 255, 255, 1); /* Более яркий фон при наведении */
+            border: 1px solid rgba(0, 0, 0, 0.2); /* Изменяем границу при наведении */
+        }
         .error,.success{margin-top:8px;font-size:14px}
         pre{background:#f5f5f5;border:1px solid #ccc;border-radius:5px;padding:8px;white-space:pre-wrap;word-break:break-all;font-size:13px}
 
@@ -111,7 +126,7 @@
 <script>
 /* ===== 1.  Встроенное расписание ===== */
 
-    const schedule = {
+const schedule = {
     "2 августа": {
         "Day off": [
             "Lera"
@@ -253,7 +268,7 @@ function generateCode() {
         return;
     }
 
-        const lines = raw.split(/\r?\n/);
+    const lines = raw.split(/\r?\n/);
     let date = '', i = 0;
     if (lines.length) date = lines[i++].trim();
 
@@ -321,20 +336,40 @@ function displaySchedule() {
         li.textContent = showName;
 
         const ul = document.createElement('ul');
+        ul.style.display = 'flex'; // Сделаем имена в строку
+        ul.style.flexWrap = 'wrap'; // Разрешим перенос на новую строку, если нужно
+        ul.style.gap = '5px'; // Уменьшаем отступы между кнопками
+        ul.style.marginTop = '5px'; // Уменьшаем отступ сверху
+        ul.style.marginBottom = '5px'; // Уменьшаем отступ снизу
+
+        const showNameDiv = document.createElement('div');
+        showNameDiv.textContent = showName;
+        showNameDiv.style.fontWeight = 'bold';
+        showNameDiv.style.fontSize = '14px'; // Уменьшаем размер шрифта
+        showNameDiv.style.marginBottom = '5px'; // Уменьшаем отступ снизу
+
         shows[showName].forEach(dancer => {
             const dancerLi = document.createElement('li');
-            const dancerLink = document.createElement('a');
-            dancerLink.href = '#';
-            dancerLink.textContent = dancer;
-            dancerLink.onclick = function(e) {
-                e.preventDefault();
+
+            const dancerButton = document.createElement('button');
+            dancerButton.textContent = dancer;
+            dancerButton.onclick = function(e) {
                 findDancer(dancer);
             };
-            dancerLi.appendChild(dancerLink);
+            dancerLi.appendChild(dancerButton);
+
             ul.appendChild(dancerLi);
         });
-        li.appendChild(ul);
-        scheduleListUl.appendChild(li);
+
+        const showContainer = document.createElement('div');
+        showContainer.appendChild(showNameDiv);
+        showContainer.appendChild(ul);
+        showContainer.style.border = '1px solid #d1c4e9';
+        showContainer.style.borderRadius = '5px';
+        showContainer.style.padding = '5px'; // Уменьшаем внутренний отступ
+        showContainer.style.marginBottom = '10px'; // Уменьшаем отступ снизу
+
+        scheduleListUl.appendChild(showContainer);
     });
 
     // Очистить контейнер кнопки "начальная страница"
