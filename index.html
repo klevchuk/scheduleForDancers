@@ -88,6 +88,35 @@
         .back-button-container button:hover {
             background: #e0f2f1;
         }
+
+        /* Стиль для строки с датой и кнопками */
+        .date-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .date-row .date-display {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .date-row .shows-btn {
+            width: auto;
+            padding: 10px 16px;
+            margin-bottom: 0;
+            background: var(--accent);
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .date-row .home-btn {
+            width: auto;
+            padding: 10px 14px;
+            margin-bottom: 0;
+            background: var(--primary);
+            font-size: 18px;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +130,11 @@
 
 <div class="content" id="content">
     <div class="tab-content" id="scheduleDisplay">
-        <div id="dateDisplay" class="date-display"></div>
+        <div class="date-row">
+            <button class="home-btn" onclick="displaySchedule()" title="Начальная страница">🏠</button>
+            <div id="dateDisplay" class="date-display"></div>
+            <button class="shows-btn" onclick="showShowsOnly()">шоу</button>
+        </div>
         <div id="scheduleList" class="dancer-list">
             <h3>Расписание на день:</h3>
             <ul id="scheduleListUl"></ul>
@@ -475,7 +508,44 @@ function findDancer(name) {
     backButtonContainer.appendChild(backButton);
 }
 
-/* ===== 5.  Инициализация ===== */
+/* ===== 5.  Показать только список шоу ===== */
+function showShowsOnly() {
+    const date = Object.keys(schedule)[0];
+    const shows = schedule[date];
+    const scheduleListUl = document.getElementById('scheduleListUl');
+    const backButtonContainer = document.getElementById('backButtonContainer');
+
+    scheduleListUl.innerHTML = '';
+
+    if (Object.keys(shows).length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Расписание пусто';
+        scheduleListUl.appendChild(li);
+        return;
+    }
+
+    Object.keys(shows).forEach(showName => {
+        const li = document.createElement('li');
+        li.textContent = showName;
+        li.style.padding = '8px 0';
+        li.style.borderBottom = '1px solid #e0e0e0';
+        li.style.fontSize = '15px';
+        scheduleListUl.appendChild(li);
+    });
+
+    // Очистить контейнер кнопки "начальная страница"
+    backButtonContainer.innerHTML = '';
+
+    // Добавляем кнопку "начальная страница" в контейнер
+    const backButton = document.createElement('button');
+    backButton.textContent = 'начальная страница';
+    backButton.onclick = () => {
+        displaySchedule(); // Вернуться к общему расписанию
+    };
+    backButtonContainer.appendChild(backButton);
+}
+
+/* ===== 6.  Инициализация ===== */
 window.onload = () => {
     displaySchedule();
 };
