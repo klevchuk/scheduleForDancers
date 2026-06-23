@@ -98,8 +98,15 @@
             margin-bottom: 10px;
         }
         .date-row .date-display {
-            flex: 1;
+            flex: 0 0 auto; /* дата не растягивается */
             margin-bottom: 0;
+            text-align: left; /* текст даты слева */
+            padding-left: 0;
+        }
+        .date-row .buttons-right {
+            display: flex;
+            gap: 8px;
+            flex: 0 0 auto;
         }
         .date-row .shows-btn {
             width: auto;
@@ -131,9 +138,11 @@
 <div class="content" id="content">
     <div class="tab-content" id="scheduleDisplay">
         <div class="date-row">
-            <button class="home-btn" onclick="displaySchedule()" title="Начальная страница">🏠</button>
             <div id="dateDisplay" class="date-display"></div>
-            <button class="shows-btn" onclick="showShowsOnly()">шоу</button>
+            <div class="buttons-right">
+                <button class="home-btn" onclick="displaySchedule()" title="Начальная страница">🏠</button>
+                <button class="shows-btn" onclick="showShowsOnly()">шоу</button>
+            </div>
         </div>
         <div id="scheduleList" class="dancer-list">
             <h3>Расписание на день:</h3>
